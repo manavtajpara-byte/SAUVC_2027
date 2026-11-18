@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="sauvc_simulation">
+
+  <!-- Include Arena Props and Pool Definition -->
+  <xacro:include filename="$(find sauvc_arena_sim)/urdf/sauvc_arena.urdf.xacro"/>
+
+  <!-- Include Autonomous Underwater Vehicle -->
+  <xacro:include filename="$(find sauvc_arena_sim)/urdf/sauvc_auv.urdf.xacro"/>
+
+  <!-- Mount AUV initially submerged inside the starting zone (x=0.7m, y=0.0m, z=1.2m submerged depth) -->
+  <joint name="world_to_auv" type="floating">
+    <parent link="world"/>
+    <child link="base_link"/>
+    <origin xyz="0.7 0.0 1.2" rpy="0 0 0"/>
+  </joint>
+
+</robot>

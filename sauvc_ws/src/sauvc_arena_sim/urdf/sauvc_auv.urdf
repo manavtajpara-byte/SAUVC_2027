@@ -1,0 +1,329 @@
+<?xml version="1.0"?>
+<robot name="sauvc_auv">
+
+  <material name="auv_body_color">
+    <color rgba="0.15 0.15 0.18 1.0"/>
+  </material>
+
+  <material name="auv_hull_yellow">
+    <color rgba="1.0 0.8 0.0 1.0"/>
+  </material>
+
+  <material name="killswitch_red">
+    <color rgba="1.0 0.0 0.0 1.0"/>
+  </material>
+
+  <material name="thruster_cyan">
+    <color rgba="0.0 0.85 1.0 1.0"/>
+  </material>
+
+  <material name="gripper_metal">
+    <color rgba="0.8 0.82 0.85 1.0"/>
+  </material>
+
+  <material name="gripper_pad">
+    <color rgba="0.1 0.75 0.9 1.0"/>
+  </material>
+
+  <material name="camera_lens_dark">
+    <color rgba="0.05 0.05 0.05 1.0"/>
+  </material>
+
+  <!-- Base link placed at vehicle center -->
+  <link name="base_link">
+    <!-- Inertial for Gazebo dynamics (mass ~18kg for neutral buoyancy underwater) -->
+    <inertial>
+      <mass value="18.0"/>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <inertia ixx="0.25" ixy="0.0" ixz="0.0" iyy="0.45" iyz="0.0" izz="0.50"/>
+    </inertial>
+    <!-- Main watertight pressure hull (Yellow cylinder) -->
+    <visual>
+      <origin xyz="0 0 0" rpy="0 1.5707963 0"/>
+      <geometry>
+        <cylinder radius="0.14" length="0.55"/>
+      </geometry>
+      <material name="auv_hull_yellow"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 1.5707963 0"/>
+      <geometry>
+        <cylinder radius="0.14" length="0.55"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <!-- Outer frame (60cm x 35cm x 28cm) -->
+  <joint name="joint_outer_frame" type="fixed">
+    <parent link="base_link"/>
+    <child link="outer_frame"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+  <link name="outer_frame">
+    <visual>
+      <geometry>
+        <box size="0.60 0.35 0.28"/>
+      </geometry>
+      <material name="auv_body_color"/>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="0.60 0.35 0.28"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="2.0"/>
+      <inertia ixx="0.03" ixy="0" ixz="0" iyy="0.06" iyz="0" izz="0.08"/>
+    </inertial>
+  </link>
+
+  <!-- Bright Red Kill Switch -->
+  <joint name="joint_kill_switch" type="fixed">
+    <parent link="base_link"/>
+    <child link="kill_switch"/>
+    <origin xyz="-0.22 0.0 0.18" rpy="0 0 0"/>
+  </joint>
+  <link name="kill_switch">
+    <visual>
+      <geometry>
+        <cylinder radius="0.04" length="0.08"/>
+      </geometry>
+      <material name="killswitch_red"/>
+    </visual>
+  </link>
+
+  <!-- 8 3D Vectored Thrusters in URDF -->
+  <!-- 4 Horizontal Vectored Thrusters (45 deg angled at 4 corners) -->
+  <joint name="joint_t1" type="fixed"><parent link="base_link"/><child link="t1"/><origin xyz="0.22 0.18 0.0" rpy="0 0 0.785"/></joint>
+  <link name="t1"><visual><geometry><cylinder radius="0.035" length="0.09"/></geometry><material name="thruster_cyan"/></visual></link>
+
+  <joint name="joint_t2" type="fixed"><parent link="base_link"/><child link="t2"/><origin xyz="0.22 -0.18 0.0" rpy="0 0 -0.785"/></joint>
+  <link name="t2"><visual><geometry><cylinder radius="0.035" length="0.09"/></geometry><material name="thruster_cyan"/></visual></link>
+
+  <joint name="joint_t3" type="fixed"><parent link="base_link"/><child link="t3"/><origin xyz="-0.22 0.18 0.0" rpy="0 0 2.356"/></joint>
+  <link name="t3"><visual><geometry><cylinder radius="0.035" length="0.09"/></geometry><material name="thruster_cyan"/></visual></link>
+
+  <joint name="joint_t4" type="fixed"><parent link="base_link"/><child link="t4"/><origin xyz="-0.22 -0.18 0.0" rpy="0 0 -2.356"/></joint>
+  <link name="t4"><visual><geometry><cylinder radius="0.035" length="0.09"/></geometry><material name="thruster_cyan"/></visual></link>
+
+  <!-- 4 Vertical Vectored Thrusters -->
+  <joint name="joint_t5" type="fixed"><parent link="base_link"/><child link="t5"/><origin xyz="0.15 0.18 0.08" rpy="0 1.5708 0"/></joint>
+  <link name="t5"><visual><geometry><cylinder radius="0.035" length="0.09"/></geometry><material name="thruster_cyan"/></visual></link>
+
+  <joint name="joint_t6" type="fixed"><parent link="base_link"/><child link="t6"/><origin xyz="0.15 -0.18 0.08" rpy="0 1.5708 0"/></joint>
+  <link name="t6"><visual><geometry><cylinder radius="0.035" length="0.09"/></geometry><material name="thruster_cyan"/></visual></link>
+
+  <joint name="joint_t7" type="fixed"><parent link="base_link"/><child link="t7"/><origin xyz="-0.15 0.18 0.08" rpy="0 1.5708 0"/></joint>
+  <link name="t7"><visual><geometry><cylinder radius="0.035" length="0.09"/></geometry><material name="thruster_cyan"/></visual></link>
+
+  <joint name="joint_t8" type="fixed"><parent link="base_link"/><child link="t8"/><origin xyz="-0.15 -0.18 0.08" rpy="0 1.5708 0"/></joint>
+  <link name="t8"><visual><geometry><cylinder radius="0.035" length="0.09"/></geometry><material name="thruster_cyan"/></visual></link>
+
+  <!-- ========================================== -->
+  <!-- FRONT ROBOTIC GRIPPER MECHANISM            -->
+  <!-- ========================================== -->
+  <joint name="joint_gripper_base" type="fixed">
+    <parent link="base_link"/>
+    <child link="gripper_base"/>
+    <origin xyz="0.32 0.0 -0.05" rpy="0 0 0"/>
+  </joint>
+  <link name="gripper_base">
+    <visual>
+      <geometry>
+        <box size="0.10 0.12 0.04"/>
+      </geometry>
+      <material name="gripper_metal"/>
+    </visual>
+  </link>
+
+  <!-- Gripper Left Finger -->
+  <joint name="joint_gripper_finger_left" type="revolute">
+    <parent link="gripper_base"/>
+    <child link="gripper_finger_left"/>
+    <origin xyz="0.08 0.045 0.0" rpy="0 0 0.0"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="-0.6" upper="0.6" effort="10.0" velocity="2.0"/>
+  </joint>
+  <link name="gripper_finger_left">
+    <visual>
+      <origin xyz="0.05 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.12 0.018 0.035"/>
+      </geometry>
+      <material name="gripper_pad"/>
+    </visual>
+    <inertial>
+      <mass value="0.1"/>
+      <inertia ixx="0.0001" ixy="0" ixz="0" iyy="0.0001" iyz="0" izz="0.0001"/>
+    </inertial>
+  </link>
+
+  <!-- Gripper Right Finger -->
+  <joint name="joint_gripper_finger_right" type="revolute">
+    <parent link="gripper_base"/>
+    <child link="gripper_finger_right"/>
+    <origin xyz="0.08 -0.045 0.0" rpy="0 0 0.0"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="-0.6" upper="0.6" effort="10.0" velocity="2.0"/>
+  </joint>
+  <link name="gripper_finger_right">
+    <visual>
+      <origin xyz="0.05 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.12 0.018 0.035"/>
+      </geometry>
+      <material name="gripper_pad"/>
+    </visual>
+    <inertial>
+      <mass value="0.1"/>
+      <inertia ixx="0.0001" ixy="0" ixz="0" iyy="0.0001" iyz="0" izz="0.0001"/>
+    </inertial>
+  </link>
+
+  <!-- ========================================== -->
+  <!-- UNDERWATER VISION CAMERAS                  -->
+  <!-- ========================================== -->
+  <!-- 1. Front Underwater Camera (Mounted at nose looking forward along +X) -->
+  <joint name="joint_front_camera" type="fixed">
+    <parent link="base_link"/>
+    <child link="front_camera_link"/>
+    <origin xyz="0.30 0.0 0.04" rpy="0 0 0"/>
+  </joint>
+  <link name="front_camera_link">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 1.5707963 0"/>
+      <geometry>
+        <cylinder radius="0.028" length="0.05"/>
+      </geometry>
+      <material name="camera_lens_dark"/>
+    </visual>
+    <inertial>
+      <mass value="0.05"/>
+      <inertia ixx="0.00005" ixy="0" ixz="0" iyy="0.00005" iyz="0" izz="0.00005"/>
+    </inertial>
+  </link>
+
+  <joint name="joint_front_camera_optical" type="fixed">
+    <parent link="front_camera_link"/>
+    <child link="front_camera_optical_frame"/>
+    <origin xyz="0.025 0 0" rpy="-1.5707963 0 -1.5707963"/>
+  </joint>
+  <link name="front_camera_optical_frame"/>
+
+  <!-- 2. Downward Underwater Camera (Mounted at belly looking down along -Z) -->
+  <joint name="joint_down_camera" type="fixed">
+    <parent link="base_link"/>
+    <child link="down_camera_link"/>
+    <origin xyz="0.10 0.0 -0.15" rpy="0 1.5707963 0"/>
+  </joint>
+  <link name="down_camera_link">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 1.5707963 0"/>
+      <geometry>
+        <cylinder radius="0.025" length="0.04"/>
+      </geometry>
+      <material name="camera_lens_dark"/>
+    </visual>
+    <inertial>
+      <mass value="0.05"/>
+      <inertia ixx="0.00005" ixy="0" ixz="0" iyy="0.00005" iyz="0" izz="0.00005"/>
+    </inertial>
+  </link>
+
+  <joint name="joint_down_camera_optical" type="fixed">
+    <parent link="down_camera_link"/>
+    <child link="down_camera_optical_frame"/>
+    <origin xyz="0.02 0 0" rpy="-1.5707963 0 -1.5707963"/>
+  </joint>
+  <link name="down_camera_optical_frame"/>
+
+  <!-- ========================================== -->
+  <!-- GAZEBO PLUGINS & SENSOR SIMULATION         -->
+  <!-- ========================================== -->
+  <gazebo reference="base_link">
+    <material>Gazebo/Yellow</material>
+    <turnGravityOff>true</turnGravityOff>
+  </gazebo>
+  <gazebo reference="outer_frame">
+    <material>Gazebo/DarkGrey</material>
+    <turnGravityOff>true</turnGravityOff>
+  </gazebo>
+
+  <!-- Planar / Holonomic Move Plugin for AUV 3D Thruster Control -->
+  <gazebo>
+    <plugin name="gazebo_ros_planar_move" filename="libgazebo_ros_planar_move.so">
+      <ros>
+        <namespace>/sauvc</namespace>
+        <remapping>cmd_vel:=cmd_vel</remapping>
+        <remapping>odom:=odom</remapping>
+      </ros>
+      <update_rate>50</update_rate>
+      <robot_base_frame>base_link</robot_base_frame>
+      <odometry_frame>world</odometry_frame>
+      <publish_odom>true</publish_odom>
+      <publish_odom_tf>false</publish_odom_tf>
+      <covariance_x>0.0001</covariance_x>
+      <covariance_y>0.0001</covariance_y>
+      <covariance_yaw>0.01</covariance_yaw>
+    </plugin>
+  </gazebo>
+
+  <!-- Front Underwater Camera Sensor Plugin -->
+  <gazebo reference="front_camera_link">
+    <sensor type="camera" name="front_camera">
+      <update_rate>30.0</update_rate>
+      <camera name="front">
+        <horizontal_fov>1.3962634</horizontal_fov>
+        <image>
+          <width>640</width>
+          <height>480</height>
+          <format>R8G8B8</format>
+        </image>
+        <clip>
+          <near>0.05</near>
+          <far>30.0</far>
+        </clip>
+      </camera>
+      <plugin name="front_camera_controller" filename="libgazebo_ros_camera.so">
+        <ros>
+          <namespace>/sauvc</namespace>
+          <remapping>image_raw:=front_camera/image_raw</remapping>
+          <remapping>camera_info:=front_camera/camera_info</remapping>
+        </ros>
+        <camera_name>front_camera</camera_name>
+        <frame_name>front_camera_optical_frame</frame_name>
+        <hack_baseline>0.07</hack_baseline>
+      </plugin>
+    </sensor>
+  </gazebo>
+
+  <!-- Downward Underwater Camera Sensor Plugin -->
+  <gazebo reference="down_camera_link">
+    <sensor type="camera" name="down_camera">
+      <update_rate>30.0</update_rate>
+      <camera name="down">
+        <horizontal_fov>1.3962634</horizontal_fov>
+        <image>
+          <width>640</width>
+          <height>480</height>
+          <format>R8G8B8</format>
+        </image>
+        <clip>
+          <near>0.05</near>
+          <far>30.0</far>
+        </clip>
+      </camera>
+      <plugin name="down_camera_controller" filename="libgazebo_ros_camera.so">
+        <ros>
+          <namespace>/sauvc</namespace>
+          <remapping>image_raw:=down_camera/image_raw</remapping>
+          <remapping>camera_info:=down_camera/camera_info</remapping>
+        </ros>
+        <camera_name>down_camera</camera_name>
+        <frame_name>down_camera_optical_frame</frame_name>
+        <hack_baseline>0.07</hack_baseline>
+      </plugin>
+    </sensor>
+  </gazebo>
+
+</robot>

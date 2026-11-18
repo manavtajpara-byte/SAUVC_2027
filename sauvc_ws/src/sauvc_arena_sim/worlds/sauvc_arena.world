@@ -1,0 +1,288 @@
+<?xml version="1.0" ?>
+<sdf version="1.6">
+  <world name="sauvc_arena">
+    <physics name="1ms" type="ode">
+      <max_step_size>0.001</max_step_size>
+      <real_time_factor>1.0</real_time_factor>
+    </physics>
+
+    <!-- Sun Light -->
+    <include>
+      <uri>model://sun</uri>
+    </include>
+
+    <!-- Ground Plane -->
+    <include>
+      <uri>model://ground_plane</uri>
+    </include>
+
+    <!-- Gazebo ROS State Plugin for 3D Robot Pose & Velocity Control -->
+    <plugin name="gazebo_ros_state" filename="libgazebo_ros_state.so">
+      <ros>
+        <namespace>/sauvc</namespace>
+      </ros>
+      <update_rate>50.0</update_rate>
+    </plugin>
+
+    <!-- Pool Floor (25m x 16m x 0.1m) -->
+    <model name="pool_floor">
+      <static>true</static>
+      <pose>12.5 0 -0.05 0 0 0</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <box><size>25.0 16.0 0.1</size></box>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box><size>25.0 16.0 0.1</size></box>
+          </geometry>
+          <material>
+            <ambient>0.12 0.53 0.85 1.0</ambient>
+            <diffuse>0.12 0.53 0.85 1.0</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- Pool Walls (2.0m depth) -->
+    <model name="pool_wall_start">
+      <static>true</static>
+      <pose>-0.1 0 1.0 0 0 0</pose>
+      <link name="link">
+        <collision name="col"><geometry><box><size>0.2 16.0 2.0</size></box></geometry></collision>
+        <visual name="vis">
+          <geometry><box><size>0.2 16.0 2.0</size></box></geometry>
+          <material><ambient>0.12 0.53 0.85 1.0</ambient><diffuse>0.12 0.53 0.85 1.0</diffuse></material>
+        </visual>
+      </link>
+    </model>
+
+    <model name="pool_wall_end">
+      <static>true</static>
+      <pose>25.1 0 1.0 0 0 0</pose>
+      <link name="link">
+        <collision name="col"><geometry><box><size>0.2 16.0 2.0</size></box></geometry></collision>
+        <visual name="vis">
+          <geometry><box><size>0.2 16.0 2.0</size></box></geometry>
+          <material><ambient>0.12 0.53 0.85 1.0</ambient><diffuse>0.12 0.53 0.85 1.0</diffuse></material>
+        </visual>
+      </link>
+    </model>
+
+    <model name="pool_wall_left">
+      <static>true</static>
+      <pose>12.5 8.1 1.0 0 0 0</pose>
+      <link name="link">
+        <collision name="col"><geometry><box><size>25.4 0.2 2.0</size></box></geometry></collision>
+        <visual name="vis">
+          <geometry><box><size>25.4 0.2 2.0</size></box></geometry>
+          <material><ambient>0.12 0.53 0.85 1.0</ambient><diffuse>0.12 0.53 0.85 1.0</diffuse></material>
+        </visual>
+      </link>
+    </model>
+
+    <model name="pool_wall_right">
+      <static>true</static>
+      <pose>12.5 -8.1 1.0 0 0 0</pose>
+      <link name="link">
+        <collision name="col"><geometry><box><size>25.4 0.2 2.0</size></box></geometry></collision>
+        <visual name="vis">
+          <geometry><box><size>25.4 0.2 2.0</size></box></geometry>
+          <material><ambient>0.12 0.53 0.85 1.0</ambient><diffuse>0.12 0.53 0.85 1.0</diffuse></material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- Starting Zone Marker (Yellow pad 1.4m x 1.4m at x=0.7, y=2.0) -->
+    <model name="start_zone_marker">
+      <static>true</static>
+      <pose>0.7 2.0 0.01 0 0 0</pose>
+      <link name="link">
+        <collision name="col"><geometry><box><size>1.4 1.4 0.02</size></box></geometry></collision>
+        <visual name="vis">
+          <geometry><box><size>1.4 1.4 0.02</size></box></geometry>
+          <material><ambient>1.0 0.85 0.0 1.0</ambient><diffuse>1.0 0.85 0.0 1.0</diffuse></material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- Obstacle Flare (15cm diameter, 2m tall, Orange, aligned with gate at x=6m, y=-1.0m) -->
+    <model name="obstacle_flare">
+      <static>true</static>
+      <pose>6.0 -1.0 1.0 0 0 0</pose>
+      <link name="link">
+        <collision name="collision"><geometry><cylinder><radius>0.075</radius><length>2.0</length></cylinder></geometry></collision>
+        <visual name="visual">
+          <geometry><cylinder><radius>0.075</radius><length>2.0</length></cylinder></geometry>
+          <material><ambient>1.0 0.45 0.0 1.0</ambient><diffuse>1.0 0.45 0.0 1.0</diffuse></material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- Task 1: Navigation Gate (150cm wide, 100cm tall centered at x=16m, y=-1.0m) -->
+    <model name="navigation_gate">
+      <static>true</static>
+      <pose>16.0 -1.0 0.5 0 0 0</pose>
+      <!-- Port (Red) at y = -0.25 in world (local y = +0.75) -->
+      <link name="port_post">
+        <pose>0 0.75 0 0 0 0</pose>
+        <collision name="collision"><geometry><cylinder><radius>0.03</radius><length>1.0</length></cylinder></geometry></collision>
+        <visual name="visual">
+          <geometry><cylinder><radius>0.03</radius><length>1.0</length></cylinder></geometry>
+          <material><ambient>0.9 0.1 0.1 1.0</ambient><diffuse>0.9 0.1 0.1 1.0</diffuse></material>
+        </visual>
+      </link>
+      <!-- Starboard (Green) at y = -1.75 in world (local y = -0.75) -->
+      <link name="starboard_post">
+        <pose>0 -0.75 0 0 0 0</pose>
+        <collision name="collision"><geometry><cylinder><radius>0.03</radius><length>1.0</length></cylinder></geometry></collision>
+        <visual name="visual">
+          <geometry><cylinder><radius>0.03</radius><length>1.0</length></cylinder></geometry>
+          <material><ambient>0.1 0.85 0.2 1.0</ambient><diffuse>0.1 0.85 0.2 1.0</diffuse></material>
+        </visual>
+      </link>
+      <!-- Crossbar at z = 1.0m -->
+      <link name="crossbar">
+        <pose>0 0 0.5 1.5707963 0 0</pose>
+        <collision name="collision"><geometry><cylinder><radius>0.03</radius><length>1.5</length></cylinder></geometry></collision>
+        <visual name="visual">
+          <geometry><cylinder><radius>0.03</radius><length>1.5</length></cylinder></geometry>
+          <material><ambient>0.15 0.15 0.15 1.0</ambient><diffuse>0.15 0.15 0.15 1.0</diffuse></material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- Task 4 Flares: 80cm tall, 1.6cm diameter with golf ball on top -->
+    <!-- Blue Flare (x=11.5, y=2.2) -->
+    <model name="flare_blue_pole">
+      <static>true</static>
+      <pose>11.5 2.2 0.4 0 0 0</pose>
+      <link name="link">
+        <collision name="col"><geometry><cylinder><radius>0.008</radius><length>0.8</length></cylinder></geometry></collision>
+        <visual name="vis">
+          <geometry><cylinder><radius>0.008</radius><length>0.8</length></cylinder></geometry>
+          <material><ambient>0.1 0.4 0.95 1.0</ambient><diffuse>0.1 0.4 0.95 1.0</diffuse></material>
+        </visual>
+      </link>
+    </model>
+    <model name="flare_blue_ball">
+      <static>true</static>
+      <pose>11.5 2.2 0.84 0 0 0</pose>
+      <link name="link">
+        <collision name="col"><geometry><sphere><radius>0.06</radius></sphere></geometry></collision>
+        <visual name="vis">
+          <geometry><sphere><radius>0.06</radius></sphere></geometry>
+          <material><ambient>0.98 0.98 0.98 1.0</ambient><diffuse>0.98 0.98 0.98 1.0</diffuse></material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- Red Flare (x=14.0, y=3.5) -->
+    <model name="flare_red_pole">
+      <static>true</static>
+      <pose>14.0 3.5 0.4 0 0 0</pose>
+      <link name="link">
+        <collision name="col"><geometry><cylinder><radius>0.008</radius><length>0.8</length></cylinder></geometry></collision>
+        <visual name="vis">
+          <geometry><cylinder><radius>0.008</radius><length>0.8</length></cylinder></geometry>
+          <material><ambient>0.9 0.1 0.1 1.0</ambient><diffuse>0.9 0.1 0.1 1.0</diffuse></material>
+        </visual>
+      </link>
+    </model>
+    <model name="flare_red_ball">
+      <static>true</static>
+      <pose>14.0 3.5 0.84 0 0 0</pose>
+      <link name="link">
+        <collision name="col"><geometry><sphere><radius>0.06</radius></sphere></geometry></collision>
+        <visual name="vis">
+          <geometry><sphere><radius>0.06</radius></sphere></geometry>
+          <material><ambient>0.98 0.98 0.98 1.0</ambient><diffuse>0.98 0.98 0.98 1.0</diffuse></material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- Yellow Flare (x=13.0, y=-3.5) -->
+    <model name="flare_yellow_pole">
+      <static>true</static>
+      <pose>13.0 -3.5 0.4 0 0 0</pose>
+      <link name="link">
+        <collision name="col"><geometry><cylinder><radius>0.008</radius><length>0.8</length></cylinder></geometry></collision>
+        <visual name="vis">
+          <geometry><cylinder><radius>0.008</radius><length>0.8</length></cylinder></geometry>
+          <material><ambient>0.95 0.85 0.05 1.0</ambient><diffuse>0.95 0.85 0.05 1.0</diffuse></material>
+        </visual>
+      </link>
+    </model>
+    <model name="flare_yellow_ball">
+      <static>true</static>
+      <pose>13.0 -3.5 0.84 0 0 0</pose>
+      <link name="link">
+        <collision name="col"><geometry><sphere><radius>0.06</radius></sphere></geometry></collision>
+        <visual name="vis">
+          <geometry><sphere><radius>0.06</radius></sphere></geometry>
+          <material><ambient>0.98 0.98 0.98 1.0</ambient><diffuse>0.98 0.98 0.98 1.0</diffuse></material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- Task 2 & 3 Target Drums (Line along x = 23m) -->
+    <!-- 1. Blue Drum (Visual Target) (x=23.0, y=4.5) -->
+    <model name="drum_blue">
+      <static>true</static>
+      <pose>23.0 4.5 0.15 0 0 0</pose>
+      <link name="link">
+        <collision name="collision"><geometry><cylinder><radius>0.30</radius><length>0.30</length></cylinder></geometry></collision>
+        <visual name="visual">
+          <geometry><cylinder><radius>0.30</radius><length>0.30</length></cylinder></geometry>
+          <material><ambient>0.1 0.3 0.9 1.0</ambient><diffuse>0.1 0.3 0.9 1.0</diffuse></material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- 2. Drum Red with Pinger (x=23.0, y=1.5) -->
+    <model name="drum_red_pinger">
+      <static>true</static>
+      <pose>23.0 1.5 0.15 0 0 0</pose>
+      <link name="link">
+        <collision name="collision"><geometry><cylinder><radius>0.30</radius><length>0.30</length></cylinder></geometry></collision>
+        <visual name="visual">
+          <geometry><cylinder><radius>0.30</radius><length>0.30</length></cylinder></geometry>
+          <material><ambient>0.85 0.1 0.1 1.0</ambient><diffuse>0.85 0.1 0.1 1.0</diffuse></material>
+        </visual>
+      </link>
+      <link name="pinger_device">
+        <pose>0 0 0.16 0 0 0</pose>
+        <visual name="vis"><geometry><cylinder><radius>0.04</radius><length>0.10</length></cylinder></geometry><material><ambient>1.0 0.9 0.1 1.0</ambient><diffuse>1.0 0.9 0.1 1.0</diffuse></material></visual>
+      </link>
+    </model>
+
+    <!-- 3. Red Drum 2 (x=23.0, y=-1.5) -->
+    <model name="drum_red_2">
+      <static>true</static>
+      <pose>23.0 -1.5 0.15 0 0 0</pose>
+      <link name="link">
+        <collision name="collision"><geometry><cylinder><radius>0.30</radius><length>0.30</length></cylinder></geometry></collision>
+        <visual name="visual">
+          <geometry><cylinder><radius>0.30</radius><length>0.30</length></cylinder></geometry>
+          <material><ambient>0.85 0.1 0.1 1.0</ambient><diffuse>0.85 0.1 0.1 1.0</diffuse></material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- 4. Red Drum 3 (x=23.0, y=-4.5) -->
+    <model name="drum_red_3">
+      <static>true</static>
+      <pose>23.0 -4.5 0.15 0 0 0</pose>
+      <link name="link">
+        <collision name="collision"><geometry><cylinder><radius>0.30</radius><length>0.30</length></cylinder></geometry></collision>
+        <visual name="visual">
+          <geometry><cylinder><radius>0.30</radius><length>0.30</length></cylinder></geometry>
+          <material><ambient>0.85 0.1 0.1 1.0</ambient><diffuse>0.85 0.1 0.1 1.0</diffuse></material>
+        </visual>
+      </link>
+    </model>
+
+  </world>
+</sdf>

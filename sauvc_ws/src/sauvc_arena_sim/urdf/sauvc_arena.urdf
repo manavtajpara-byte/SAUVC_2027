@@ -1,0 +1,369 @@
+<?xml version="1.0"?>
+<robot name="sauvc_arena">
+
+  <material name="pool_blue">
+    <color rgba="0.12 0.53 0.85 0.95"/>
+  </material>
+
+  <material name="start_zone_yellow">
+    <color rgba="1.0 0.85 0.0 0.8"/>
+  </material>
+
+  <material name="qual_gate_orange">
+    <color rgba="1.0 0.45 0.0 1.0"/>
+  </material>
+
+  <material name="gate_red">
+    <color rgba="0.9 0.1 0.1 1.0"/>
+  </material>
+
+  <material name="gate_green">
+    <color rgba="0.1 0.85 0.2 1.0"/>
+  </material>
+
+  <material name="gate_crossbar_black">
+    <color rgba="0.15 0.15 0.15 1.0"/>
+  </material>
+
+  <material name="drum_red">
+    <color rgba="0.85 0.1 0.1 1.0"/>
+  </material>
+
+  <material name="drum_blue">
+    <color rgba="0.1 0.3 0.9 1.0"/>
+  </material>
+
+  <material name="pinger_yellow">
+    <color rgba="1.0 0.9 0.1 1.0"/>
+  </material>
+
+  <material name="flare_red">
+    <color rgba="0.9 0.1 0.1 1.0"/>
+  </material>
+
+  <material name="flare_yellow">
+    <color rgba="0.95 0.85 0.05 1.0"/>
+  </material>
+
+  <material name="flare_blue">
+    <color rgba="0.1 0.4 0.95 1.0"/>
+  </material>
+
+  <material name="golf_ball_white">
+    <color rgba="0.98 0.98 0.98 1.0"/>
+  </material>
+
+  <!-- World coordinate anchor (Origin is at pool bottom, start wall center: x=0, y=0, z=0) -->
+  <link name="world"/>
+
+  <!-- POOL FLOOR: 25m length (x: 0 to 25m), 16m width (y: -8m to +8m), 2m depth -->
+  <joint name="world_to_pool" type="fixed">
+    <parent link="world"/>
+    <child link="pool_floor"/>
+    <origin xyz="12.5 0.0 -0.05" rpy="0 0 0"/>
+  </joint>
+  <link name="pool_floor">
+    <visual>
+      <geometry>
+        <box size="25.0 16.0 0.1"/>
+      </geometry>
+      <material name="pool_blue"/>
+    </visual>
+  </link>
+
+  <!-- POOL WALLS (Depth: 2.0m, Thickness: 0.2m) -->
+  <joint name="joint_wall_start" type="fixed">
+    <parent link="world"/>
+    <child link="wall_start"/>
+    <origin xyz="-0.1 0.0 1.0" rpy="0 0 0"/>
+  </joint>
+  <link name="wall_start">
+    <visual>
+      <geometry>
+        <box size="0.2 16.0 2.0"/>
+      </geometry>
+      <material name="pool_blue"/>
+    </visual>
+  </link>
+
+  <joint name="joint_wall_end" type="fixed">
+    <parent link="world"/>
+    <child link="wall_end"/>
+    <origin xyz="25.1 0.0 1.0" rpy="0 0 0"/>
+  </joint>
+  <link name="wall_end">
+    <visual>
+      <geometry>
+        <box size="0.2 16.0 2.0"/>
+      </geometry>
+      <material name="pool_blue"/>
+    </visual>
+  </link>
+
+  <joint name="joint_wall_left" type="fixed">
+    <parent link="world"/>
+    <child link="wall_left"/>
+    <origin xyz="12.5 8.1 1.0" rpy="0 0 0"/>
+  </joint>
+  <link name="wall_left">
+    <visual>
+      <geometry>
+        <box size="25.4 0.2 2.0"/>
+      </geometry>
+      <material name="pool_blue"/>
+    </visual>
+  </link>
+
+  <joint name="joint_wall_right" type="fixed">
+    <parent link="world"/>
+    <child link="wall_right"/>
+    <origin xyz="12.5 -8.1 1.0" rpy="0 0 0"/>
+  </joint>
+  <link name="wall_right">
+    <visual>
+      <geometry>
+        <box size="25.4 0.2 2.0"/>
+      </geometry>
+      <material name="pool_blue"/>
+    </visual>
+  </link>
+
+  <!-- STARTING ZONE: 140cm x 140cm at water surface, on the left side (y = +2.0m as shown in Top View) -->
+  <joint name="joint_start_zone" type="fixed">
+    <parent link="world"/>
+    <child link="start_zone"/>
+    <origin xyz="0.7 2.0 1.995" rpy="0 0 0"/>
+  </joint>
+  <link name="start_zone">
+    <visual>
+      <geometry>
+        <box size="1.4 1.4 0.01"/>
+      </geometry>
+      <material name="start_zone_yellow"/>
+    </visual>
+  </link>
+
+  <!-- QUALIFICATION GATE REMOVED: Using the Official Finals Arena Diagram -->
+
+  <!-- TASK 1: NAVIGATION GATE (150cm wide x 100cm tall, located along the line at 16m, towards bottom/center) -->
+  <joint name="joint_nav_gate_port" type="fixed">
+    <parent link="world"/>
+    <child link="nav_gate_port"/>
+    <origin xyz="16.0 -0.25 0.5" rpy="0 0 0"/>
+  </joint>
+  <link name="nav_gate_port">
+    <visual>
+      <geometry>
+        <cylinder radius="0.03" length="1.0"/>
+      </geometry>
+      <material name="gate_red"/>
+    </visual>
+  </link>
+
+  <joint name="joint_nav_gate_starboard" type="fixed">
+    <parent link="world"/>
+    <child link="nav_gate_starboard"/>
+    <origin xyz="16.0 -1.75 0.5" rpy="0 0 0"/>
+  </joint>
+  <link name="nav_gate_starboard">
+    <visual>
+      <geometry>
+        <cylinder radius="0.03" length="1.0"/>
+      </geometry>
+      <material name="gate_green"/>
+    </visual>
+  </link>
+
+  <joint name="joint_nav_gate_crossbar" type="fixed">
+    <parent link="world"/>
+    <child link="nav_gate_crossbar"/>
+    <origin xyz="16.0 -1.0 1.0" rpy="1.5707963 0 0"/>
+  </joint>
+  <link name="nav_gate_crossbar">
+    <visual>
+      <geometry>
+        <cylinder radius="0.03" length="1.5"/>
+      </geometry>
+      <material name="gate_crossbar_black"/>
+    </visual>
+  </link>
+
+  <!-- OBSTACLE FLARE: 15cm dia, full depth cylinder (Orange), placed in 4m-8m zone aligned with Navigation Gate (x=6m, y=-1.0m) -->
+  <joint name="joint_orange_flare" type="fixed">
+    <parent link="world"/>
+    <child link="orange_flare"/>
+    <origin xyz="6.0 -1.0 1.0" rpy="0 0 0"/>
+  </joint>
+  <link name="orange_flare">
+    <visual>
+      <geometry>
+        <cylinder radius="0.075" length="2.0"/>
+      </geometry>
+      <material name="qual_gate_orange"/>
+    </visual>
+  </link>
+
+  <!-- TASK 2 & 3: TARGET ZONE DRUMS (Line along x = 23m, from top to bottom) -->
+  <!-- 1. Blue Drum (Top in diagram: y = +4.5m) -->
+  <joint name="joint_drum_blue" type="fixed">
+    <parent link="world"/>
+    <child link="drum_blue"/>
+    <origin xyz="23.0 4.5 0.15" rpy="0 0 0"/>
+  </joint>
+  <link name="drum_blue">
+    <visual>
+      <geometry>
+        <cylinder radius="0.30" length="0.30"/>
+      </geometry>
+      <material name="drum_blue"/>
+    </visual>
+  </link>
+
+  <!-- 2. Red Drum with 45kHz Pinger (y = +1.5m) -->
+  <joint name="joint_drum_red_pinger" type="fixed">
+    <parent link="world"/>
+    <child link="drum_red_pinger"/>
+    <origin xyz="23.0 1.5 0.15" rpy="0 0 0"/>
+  </joint>
+  <link name="drum_red_pinger">
+    <visual>
+      <geometry>
+        <cylinder radius="0.30" length="0.30"/>
+      </geometry>
+      <material name="drum_red"/>
+    </visual>
+  </link>
+
+  <joint name="joint_pinger_device" type="fixed">
+    <parent link="drum_red_pinger"/>
+    <child link="pinger_device"/>
+    <origin xyz="0.0 0.0 0.05" rpy="0 0 0"/>
+  </joint>
+  <link name="pinger_device">
+    <visual>
+      <geometry>
+        <cylinder radius="0.04" length="0.10"/>
+      </geometry>
+      <material name="pinger_yellow"/>
+    </visual>
+  </link>
+
+  <!-- 3. Red Drum 2 (y = -1.5m) -->
+  <joint name="joint_drum_red_2" type="fixed">
+    <parent link="world"/>
+    <child link="drum_red_2"/>
+    <origin xyz="23.0 -1.5 0.15" rpy="0 0 0"/>
+  </joint>
+  <link name="drum_red_2">
+    <visual>
+      <geometry>
+        <cylinder radius="0.30" length="0.30"/>
+      </geometry>
+      <material name="drum_red"/>
+    </visual>
+  </link>
+
+  <!-- 4. Red Drum 3 (Bottom in diagram: y = -4.5m) -->
+  <joint name="joint_drum_red_3" type="fixed">
+    <parent link="world"/>
+    <child link="drum_red_3"/>
+    <origin xyz="23.0 -4.5 0.15" rpy="0 0 0"/>
+  </joint>
+  <link name="drum_red_3">
+    <visual>
+      <geometry>
+        <cylinder radius="0.30" length="0.30"/>
+      </geometry>
+      <material name="drum_red"/>
+    </visual>
+  </link>
+
+  <!-- TASK 4: COMMUNICATION FLARES (Yellow shaded zone before gate: x=10m to 16m) -->
+  <!-- Blue Flare (top-left in zone: x=11.5m, y=2.2m) -->
+  <joint name="joint_flare_blue_pole" type="fixed">
+    <parent link="world"/>
+    <child link="flare_blue_pole"/>
+    <origin xyz="11.5 2.2 0.4" rpy="0 0 0"/>
+  </joint>
+  <link name="flare_blue_pole">
+    <visual>
+      <geometry>
+        <cylinder radius="0.008" length="0.8"/>
+      </geometry>
+      <material name="flare_blue"/>
+    </visual>
+  </link>
+
+  <joint name="joint_flare_blue_ball" type="floating">
+    <parent link="world"/>
+    <child link="flare_blue_ball"/>
+    <origin xyz="11.5 2.2 0.84" rpy="0 0 0"/>
+  </joint>
+  <link name="flare_blue_ball">
+    <visual>
+      <geometry>
+        <sphere radius="0.06"/>
+      </geometry>
+      <material name="golf_ball_white"/>
+    </visual>
+  </link>
+
+  <!-- Red Flare (top-right in zone: x=14.0m, y=3.5m) -->
+  <joint name="joint_flare_red_pole" type="fixed">
+    <parent link="world"/>
+    <child link="flare_red_pole"/>
+    <origin xyz="14.0 3.5 0.4" rpy="0 0 0"/>
+  </joint>
+  <link name="flare_red_pole">
+    <visual>
+      <geometry>
+        <cylinder radius="0.008" length="0.8"/>
+      </geometry>
+      <material name="flare_red"/>
+    </visual>
+  </link>
+
+  <joint name="joint_flare_red_ball" type="floating">
+    <parent link="world"/>
+    <child link="flare_red_ball"/>
+    <origin xyz="14.0 3.5 0.84" rpy="0 0 0"/>
+  </joint>
+  <link name="flare_red_ball">
+    <visual>
+      <geometry>
+        <sphere radius="0.06"/>
+      </geometry>
+      <material name="golf_ball_white"/>
+    </visual>
+  </link>
+
+  <!-- Yellow Flare (bottom in zone: x=13.0m, y=-3.5m) -->
+  <joint name="joint_flare_yellow_pole" type="fixed">
+    <parent link="world"/>
+    <child link="flare_yellow_pole"/>
+    <origin xyz="13.0 -3.5 0.4" rpy="0 0 0"/>
+  </joint>
+  <link name="flare_yellow_pole">
+    <visual>
+      <geometry>
+        <cylinder radius="0.008" length="0.8"/>
+      </geometry>
+      <material name="flare_yellow"/>
+    </visual>
+  </link>
+
+  <joint name="joint_flare_yellow_ball" type="floating">
+    <parent link="world"/>
+    <child link="flare_yellow_ball"/>
+    <origin xyz="13.0 -3.5 0.84" rpy="0 0 0"/>
+  </joint>
+  <link name="flare_yellow_ball">
+    <visual>
+      <geometry>
+        <sphere radius="0.06"/>
+      </geometry>
+      <material name="golf_ball_white"/>
+    </visual>
+  </link>
+
+</robot>

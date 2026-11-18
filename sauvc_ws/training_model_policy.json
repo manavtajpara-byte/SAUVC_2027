@@ -1,0 +1,106 @@
+{
+  "iteration": 12,
+  "best_duration": 75.58855438232422,
+  "best_score": 145,
+  "surge_speed_mult": 1.0,
+  "yaw_gain": 1.4,
+  "yaw_rate_limit": 0.9,
+  "heave_gain": 0.9,
+  "history": [
+    {
+      "epoch": 1,
+      "accuracy": 100.0,
+      "duration": 75.69,
+      "score": 145,
+      "completed": true
+    },
+    {
+      "run": 1,
+      "total_iteration": 2,
+      "accuracy": 100.0,
+      "duration": 75.59,
+      "score": 145,
+      "completed": true
+    },
+    {
+      "run": 2,
+      "total_iteration": 3,
+      "accuracy": 100.0,
+      "duration": 75.71,
+      "score": 145,
+      "completed": true
+    },
+    {
+      "run": 3,
+      "total_iteration": 4,
+      "accuracy": 100.0,
+      "duration": 75.71,
+      "score": 145,
+      "completed": true
+    },
+    {
+      "run": 4,
+      "total_iteration": 5,
+      "accuracy": 100.0,
+      "duration": 75.71,
+      "score": 145,
+      "completed": true
+    },
+    {
+      "run": 5,
+      "total_iteration": 6,
+      "accuracy": 100.0,
+      "duration": 75.61,
+      "score": 145,
+      "completed": true
+    },
+    {
+      "run": 6,
+      "total_iteration": 7,
+      "accuracy": 100.0,
+      "duration": 75.61,
+      "score": 145,
+      "completed": true
+    },
+    {
+      "run": 7,
+      "total_iteration": 8,
+      "accuracy": 100.0,
+      "duration": 75.71,
+      "score": 145,
+      "completed": true
+    },
+    {
+      "run": 8,
+      "total_iteration": 9,
+      "accuracy": 100.0,
+      "duration": 75.72,
+      "score": 145,
+      "completed": true
+    },
+    {
+      "run": 9,
+      "total_iteration": 10,
+      "accuracy": 100.0,
+      "duration": 75.61,
+      "score": 145,
+      "completed": true
+    },
+    {
+      "run": 10,
+      "total_iteration": 11,
+      "accuracy": 100.0,
+      "duration": 75.71,
+      "score": 145,
+      "completed": true
+    },
+    {
+      "run": 11,
+      "total_iteration": 12,
+      "accuracy": 100.0,
+      "duration": 75.72,
+      "score": 145,
+      "completed": true
+    }
+  ]
+}

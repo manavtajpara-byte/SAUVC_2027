@@ -1,0 +1,119 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="sauvc_auv">
+
+  <!-- AUV model complying with SAUVC bonus size: < 70cm x 50cm x 50cm (0.60m x 0.35m x 0.28m) -->
+  <material name="auv_body_color">
+    <color rgba="0.1 0.1 0.12 1.0"/>
+  </material>
+
+  <material name="auv_accent_color">
+    <color rgba="0.95 0.7 0.05 1.0"/>
+  </material>
+
+  <material name="killswitch_color">
+    <color rgba="0.95 0.05 0.05 1.0"/>
+  </material>
+
+  <material name="camera_lens">
+    <color rgba="0.2 0.8 1.0 1.0"/>
+  </material>
+
+  <!-- Base link placed at vehicle center -->
+  <link name="base_link">
+    <!-- Main watertight pressure hull -->
+    <visual>
+      <origin xyz="0 0 0" rpy="0 1.5707963 0"/>
+      <geometry>
+        <cylinder radius="0.12" length="0.55"/>
+      </geometry>
+      <material name="auv_accent_color"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 1.5707963 0"/>
+      <geometry>
+        <cylinder radius="0.12" length="0.55"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="25.0"/>
+      <origin xyz="0 0 -0.02"/>
+      <inertia ixx="0.35" ixy="0" ixz="0" iyy="0.75" iyz="0" izz="0.75"/>
+    </inertial>
+  </link>
+
+  <!-- Outer frame: 60cm length x 35cm width x 28cm height -->
+  <joint name="joint_outer_frame" type="fixed">
+    <parent link="base_link"/>
+    <child link="outer_frame"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+  <link name="outer_frame">
+    <visual>
+      <geometry>
+        <box size="0.60 0.35 0.28"/>
+      </geometry>
+      <material name="auv_body_color"/>
+    </visual>
+  </link>
+
+  <!-- Bright Red Safety Kill Switch (Required by SAUVC Rules) -->
+  <joint name="joint_kill_switch" type="fixed">
+    <parent link="base_link"/>
+    <child link="kill_switch"/>
+    <origin xyz="-0.22 0.0 0.18" rpy="0 0 0"/>
+  </joint>
+  <link name="kill_switch">
+    <visual>
+      <geometry>
+        <cylinder radius="0.035" length="0.06"/>
+      </geometry>
+      <material name="killswitch_color"/>
+    </visual>
+  </link>
+
+  <!-- Forward-facing stereo/main camera -->
+  <joint name="joint_front_camera" type="fixed">
+    <parent link="base_link"/>
+    <child link="front_camera"/>
+    <origin xyz="0.31 0.0 0.0" rpy="0 0 0"/>
+  </joint>
+  <link name="front_camera">
+    <visual>
+      <geometry>
+        <box size="0.04 0.08 0.04"/>
+      </geometry>
+      <material name="camera_lens"/>
+    </visual>
+  </link>
+
+  <!-- Bottom-facing camera (for detecting drums and gate line) -->
+  <joint name="joint_bottom_camera" type="fixed">
+    <parent link="base_link"/>
+    <child link="bottom_camera"/>
+    <origin xyz="0.10 0.0 -0.15" rpy="0 1.5707963 0"/>
+  </joint>
+  <link name="bottom_camera">
+    <visual>
+      <geometry>
+        <box size="0.04 0.06 0.04"/>
+      </geometry>
+      <material name="camera_lens"/>
+    </visual>
+  </link>
+
+  <!-- Ball Dropper Mechanism (Payload tube) -->
+  <joint name="joint_dropper" type="fixed">
+    <parent link="base_link"/>
+    <child link="dropper_tube"/>
+    <origin xyz="-0.05 0.0 -0.15" rpy="0 0 0"/>
+  </joint>
+  <link name="dropper_tube">
+    <visual>
+      <geometry>
+        <cylinder radius="0.025" length="0.08"/>
+      </geometry>
+      <material name="auv_accent_color"/>
+    </visual>
+  </link>
+
+</robot>

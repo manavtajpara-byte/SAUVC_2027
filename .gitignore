@@ -1,0 +1,9 @@
+dataset/
+runs/
+sauvc_ws/build/
+sauvc_ws/install/
+sauvc_ws/log/
+*.zip
+__pycache__/
+*.pt
+!sauvc_model_package/best.pt
